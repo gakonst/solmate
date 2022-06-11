@@ -203,11 +203,9 @@ contract FixedPointMathLibTest is DSTestPlus {
         FixedPointMathLib.divWadUp(x, 0);
     }
 
-    function testMulDivDown(
-        uint256 x,
-        uint256 y,
-        uint256 denominator
-    ) public {
+    function testMulDivDown(uint256 x, uint256 y, uint256 denominator)
+        public
+    {
         // Ignore cases where x * y overflows or denominator is 0.
         unchecked {
             if (denominator == 0 || (x != 0 && (x * y) / x != y)) return;
@@ -220,7 +218,10 @@ contract FixedPointMathLibTest is DSTestPlus {
         uint256 x,
         uint256 y,
         uint256 denominator
-    ) public pure {
+    )
+        public
+        pure
+    {
         // Ignore cases where x * y does not overflow or denominator is 0.
         unchecked {
             if (denominator == 0 || (x * y) / x == y) revert();
@@ -229,15 +230,14 @@ contract FixedPointMathLibTest is DSTestPlus {
         FixedPointMathLib.mulDivDown(x, y, denominator);
     }
 
-    function testFailMulDivDownZeroDenominator(uint256 x, uint256 y) public pure {
+    function testFailMulDivDownZeroDenominator(uint256 x, uint256 y)
+        public
+        pure
+    {
         FixedPointMathLib.mulDivDown(x, y, 0);
     }
 
-    function testMulDivUp(
-        uint256 x,
-        uint256 y,
-        uint256 denominator
-    ) public {
+    function testMulDivUp(uint256 x, uint256 y, uint256 denominator) public {
         // Ignore cases where x * y overflows or denominator is 0.
         unchecked {
             if (denominator == 0 || (x != 0 && (x * y) / x != y)) return;
@@ -246,11 +246,10 @@ contract FixedPointMathLibTest is DSTestPlus {
         assertEq(FixedPointMathLib.mulDivUp(x, y, denominator), x * y == 0 ? 0 : (x * y - 1) / denominator + 1);
     }
 
-    function testFailMulDivUpOverflow(
-        uint256 x,
-        uint256 y,
-        uint256 denominator
-    ) public pure {
+    function testFailMulDivUpOverflow(uint256 x, uint256 y, uint256 denominator)
+        public
+        pure
+    {
         // Ignore cases where x * y does not overflow or denominator is 0.
         unchecked {
             if (denominator == 0 || (x * y) / x == y) revert();
@@ -259,7 +258,10 @@ contract FixedPointMathLibTest is DSTestPlus {
         FixedPointMathLib.mulDivUp(x, y, denominator);
     }
 
-    function testFailMulDivUpZeroDenominator(uint256 x, uint256 y) public pure {
+    function testFailMulDivUpZeroDenominator(uint256 x, uint256 y)
+        public
+        pure
+    {
         FixedPointMathLib.mulDivUp(x, y, 0);
     }
 

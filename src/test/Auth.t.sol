@@ -8,11 +8,12 @@ import {MockAuthority} from "./utils/mocks/MockAuthority.sol";
 import {Authority} from "../auth/Auth.sol";
 
 contract OutOfOrderAuthority is Authority {
-    function canCall(
-        address,
-        address,
-        bytes4
-    ) public pure override returns (bool) {
+    function canCall(address, address, bytes4)
+        public
+        pure
+        override
+        returns (bool)
+    {
         revert("OUT_OF_ORDER");
     }
 }
@@ -114,7 +115,12 @@ contract AuthTest is DSTestPlus {
         assertEq(address(mockAuthChild.authority()), address(newAuthority));
     }
 
-    function testSetOwnerWithPermissiveAuthority(address deadOwner, address newOwner) public {
+    function testSetOwnerWithPermissiveAuthority(
+        address deadOwner,
+        address newOwner
+    )
+        public
+    {
         if (deadOwner == address(this)) deadOwner = address(0);
 
         mockAuthChild.setAuthority(new MockAuthority(true));
@@ -122,7 +128,12 @@ contract AuthTest is DSTestPlus {
         mockAuthChild.setOwner(newOwner);
     }
 
-    function testSetAuthorityWithPermissiveAuthority(address deadOwner, Authority newAuthority) public {
+    function testSetAuthorityWithPermissiveAuthority(
+        address deadOwner,
+        Authority newAuthority
+    )
+        public
+    {
         if (deadOwner == address(this)) deadOwner = address(0);
 
         mockAuthChild.setAuthority(new MockAuthority(true));
@@ -130,7 +141,9 @@ contract AuthTest is DSTestPlus {
         mockAuthChild.setAuthority(newAuthority);
     }
 
-    function testCallFunctionWithPermissiveAuthority(address deadOwner) public {
+    function testCallFunctionWithPermissiveAuthority(address deadOwner)
+        public
+    {
         if (deadOwner == address(this)) deadOwner = address(0);
 
         mockAuthChild.setAuthority(new MockAuthority(true));
@@ -138,14 +151,21 @@ contract AuthTest is DSTestPlus {
         mockAuthChild.updateFlag();
     }
 
-    function testFailSetOwnerAsNonOwner(address deadOwner, address newOwner) public {
+    function testFailSetOwnerAsNonOwner(address deadOwner, address newOwner)
+        public
+    {
         if (deadOwner == address(this)) deadOwner = address(0);
 
         mockAuthChild.setOwner(deadOwner);
         mockAuthChild.setOwner(newOwner);
     }
 
-    function testFailSetAuthorityAsNonOwner(address deadOwner, Authority newAuthority) public {
+    function testFailSetAuthorityAsNonOwner(
+        address deadOwner,
+        Authority newAuthority
+    )
+        public
+    {
         if (deadOwner == address(this)) deadOwner = address(0);
 
         mockAuthChild.setOwner(deadOwner);
@@ -159,7 +179,12 @@ contract AuthTest is DSTestPlus {
         mockAuthChild.updateFlag();
     }
 
-    function testFailSetOwnerWithRestrictiveAuthority(address deadOwner, address newOwner) public {
+    function testFailSetOwnerWithRestrictiveAuthority(
+        address deadOwner,
+        address newOwner
+    )
+        public
+    {
         if (deadOwner == address(this)) deadOwner = address(0);
 
         mockAuthChild.setAuthority(new MockAuthority(false));
@@ -167,7 +192,12 @@ contract AuthTest is DSTestPlus {
         mockAuthChild.setOwner(newOwner);
     }
 
-    function testFailSetAuthorityWithRestrictiveAuthority(address deadOwner, Authority newAuthority) public {
+    function testFailSetAuthorityWithRestrictiveAuthority(
+        address deadOwner,
+        Authority newAuthority
+    )
+        public
+    {
         if (deadOwner == address(this)) deadOwner = address(0);
 
         mockAuthChild.setAuthority(new MockAuthority(false));
@@ -175,7 +205,9 @@ contract AuthTest is DSTestPlus {
         mockAuthChild.setAuthority(newAuthority);
     }
 
-    function testFailCallFunctionWithRestrictiveAuthority(address deadOwner) public {
+    function testFailCallFunctionWithRestrictiveAuthority(address deadOwner)
+        public
+    {
         if (deadOwner == address(this)) deadOwner = address(0);
 
         mockAuthChild.setAuthority(new MockAuthority(false));
@@ -183,7 +215,9 @@ contract AuthTest is DSTestPlus {
         mockAuthChild.updateFlag();
     }
 
-    function testFailSetOwnerAsOwnerWithOutOfOrderAuthority(address deadOwner) public {
+    function testFailSetOwnerAsOwnerWithOutOfOrderAuthority(address deadOwner)
+        public
+    {
         if (deadOwner == address(this)) deadOwner = address(0);
 
         mockAuthChild.setAuthority(new OutOfOrderAuthority());

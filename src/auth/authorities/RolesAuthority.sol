@@ -11,17 +11,32 @@ contract RolesAuthority is Auth, Authority {
                                  EVENTS
     //////////////////////////////////////////////////////////////*/
 
-    event UserRoleUpdated(address indexed user, uint8 indexed role, bool enabled);
+    event UserRoleUpdated(
+        address indexed user,
+        uint8 indexed role,
+        bool enabled
+    );
 
-    event PublicCapabilityUpdated(address indexed target, bytes4 indexed functionSig, bool enabled);
+    event PublicCapabilityUpdated(
+        address indexed target,
+        bytes4 indexed functionSig,
+        bool enabled
+    );
 
-    event RoleCapabilityUpdated(uint8 indexed role, address indexed target, bytes4 indexed functionSig, bool enabled);
+    event RoleCapabilityUpdated(
+        uint8 indexed role,
+        address indexed target,
+        bytes4 indexed functionSig,
+        bool enabled
+    );
 
     /*//////////////////////////////////////////////////////////////
                                CONSTRUCTOR
     //////////////////////////////////////////////////////////////*/
 
-    constructor(address _owner, Authority _authority) Auth(_owner, _authority) {}
+    constructor(address _owner, Authority _authority)
+        Auth(_owner, _authority)
+    {}
 
     /*//////////////////////////////////////////////////////////////
                             ROLE/USER STORAGE
@@ -33,7 +48,12 @@ contract RolesAuthority is Auth, Authority {
 
     mapping(address => mapping(bytes4 => bytes32)) public getRolesWithCapability;
 
-    function doesUserHaveRole(address user, uint8 role) public view virtual returns (bool) {
+    function doesUserHaveRole(address user, uint8 role)
+        public
+        view
+        virtual
+        returns (bool)
+    {
         return (uint256(getUserRoles[user]) >> role) & 1 != 0;
     }
 
@@ -41,7 +61,12 @@ contract RolesAuthority is Auth, Authority {
         uint8 role,
         address target,
         bytes4 functionSig
-    ) public view virtual returns (bool) {
+    )
+        public
+        view
+        virtual
+        returns (bool)
+    {
         return (uint256(getRolesWithCapability[target][functionSig]) >> role) & 1 != 0;
     }
 
@@ -49,11 +74,13 @@ contract RolesAuthority is Auth, Authority {
                            AUTHORIZATION LOGIC
     //////////////////////////////////////////////////////////////*/
 
-    function canCall(
-        address user,
-        address target,
-        bytes4 functionSig
-    ) public view virtual override returns (bool) {
+    function canCall(address user, address target, bytes4 functionSig)
+        public
+        view
+        virtual
+        override
+        returns (bool)
+    {
         return
             isCapabilityPublic[target][functionSig] ||
             bytes32(0) != getUserRoles[user] & getRolesWithCapability[target][functionSig];
@@ -67,7 +94,11 @@ contract RolesAuthority is Auth, Authority {
         address target,
         bytes4 functionSig,
         bool enabled
-    ) public virtual requiresAuth {
+    )
+        public
+        virtual
+        requiresAuth
+    {
         isCapabilityPublic[target][functionSig] = enabled;
 
         emit PublicCapabilityUpdated(target, functionSig, enabled);
@@ -78,7 +109,11 @@ contract RolesAuthority is Auth, Authority {
         address target,
         bytes4 functionSig,
         bool enabled
-    ) public virtual requiresAuth {
+    )
+        public
+        virtual
+        requiresAuth
+    {
         if (enabled) {
             getRolesWithCapability[target][functionSig] |= bytes32(1 << role);
         } else {
@@ -92,11 +127,11 @@ contract RolesAuthority is Auth, Authority {
                        USER ROLE ASSIGNMENT LOGIC
     //////////////////////////////////////////////////////////////*/
 
-    function setUserRole(
-        address user,
-        uint8 role,
-        bool enabled
-    ) public virtual requiresAuth {
+    function setUserRole(address user, uint8 role, bool enabled)
+        public
+        virtual
+        requiresAuth
+    {
         if (enabled) {
             getUserRoles[user] |= bytes32(1 << role);
         } else {

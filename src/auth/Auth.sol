@@ -27,7 +27,12 @@ abstract contract Auth {
         _;
     }
 
-    function isAuthorized(address user, bytes4 functionSig) internal view virtual returns (bool) {
+    function isAuthorized(address user, bytes4 functionSig)
+        internal
+        view
+        virtual
+        returns (bool)
+    {
         Authority auth = authority; // Memoizing authority saves us a warm SLOAD, around 100 gas.
 
         // Checking if the caller is the owner only after calling the authority saves gas in most cases, but be
@@ -56,9 +61,8 @@ abstract contract Auth {
 /// @author Solmate (https://github.com/Rari-Capital/solmate/blob/main/src/auth/Auth.sol)
 /// @author Modified from Dappsys (https://github.com/dapphub/ds-auth/blob/master/src/auth.sol)
 interface Authority {
-    function canCall(
-        address user,
-        address target,
-        bytes4 functionSig
-    ) external view returns (bool);
+    function canCall(address user, address target, bytes4 functionSig)
+        external
+        view
+        returns (bool);
 }

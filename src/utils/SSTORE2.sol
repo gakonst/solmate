@@ -51,17 +51,21 @@ library SSTORE2 {
         return readBytecode(pointer, DATA_OFFSET, pointer.code.length - DATA_OFFSET);
     }
 
-    function read(address pointer, uint256 start) internal view returns (bytes memory) {
+    function read(address pointer, uint256 start)
+        internal
+        view
+        returns (bytes memory)
+    {
         start += DATA_OFFSET;
 
         return readBytecode(pointer, start, pointer.code.length - start);
     }
 
-    function read(
-        address pointer,
-        uint256 start,
-        uint256 end
-    ) internal view returns (bytes memory) {
+    function read(address pointer, uint256 start, uint256 end)
+        internal
+        view
+        returns (bytes memory)
+    {
         start += DATA_OFFSET;
         end += DATA_OFFSET;
 
@@ -74,11 +78,11 @@ library SSTORE2 {
                           INTERNAL HELPER LOGIC
     //////////////////////////////////////////////////////////////*/
 
-    function readBytecode(
-        address pointer,
-        uint256 start,
-        uint256 size
-    ) private view returns (bytes memory data) {
+    function readBytecode(address pointer, uint256 start, uint256 size)
+        private
+        view
+        returns (bytes memory data)
+    {
         assembly {
             // Get a pointer to some free memory.
             data := mload(0x40)

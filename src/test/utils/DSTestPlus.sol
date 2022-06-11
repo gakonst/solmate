@@ -10,7 +10,8 @@ import {Hevm} from "./Hevm.sol";
 contract DSTestPlus is DSTest {
     Hevm internal constant hevm = Hevm(HEVM_ADDRESS);
 
-    address internal constant DEAD_ADDRESS = 0xDeaDbeefdEAdbeefdEadbEEFdeadbeEFdEaDbeeF;
+    address internal constant DEAD_ADDRESS =
+        0xDeaDbeefdEAdbeefdEadbEEFdeadbeEFdEaDbeeF;
 
     string private checkpointLabel;
     uint256 private checkpointGasLeft = 1; // Start the slot warm.
@@ -60,7 +61,8 @@ contract DSTestPlus is DSTest {
         // Subtract 100 to account for the warm SLOAD in startMeasuringGas.
         uint256 gasDelta = checkpointGasLeft - checkpointGasLeft2 - 100;
 
-        emit log_named_uint(string(abi.encodePacked(checkpointLabel, " Gas")), gasDelta);
+        emit
+            log_named_uint(string(abi.encodePacked(checkpointLabel, " Gas")), gasDelta);
     }
 
     function fail(string memory err) internal virtual {
@@ -92,11 +94,10 @@ contract DSTestPlus is DSTest {
         b ? assertTrue(a) : assertFalse(a);
     }
 
-    function assertApproxEq(
-        uint256 a,
-        uint256 b,
-        uint256 maxDelta
-    ) internal virtual {
+    function assertApproxEq(uint256 a, uint256 b, uint256 maxDelta)
+        internal
+        virtual
+    {
         uint256 delta = a > b ? a - b : b - a;
 
         if (delta > maxDelta) {
@@ -113,10 +114,13 @@ contract DSTestPlus is DSTest {
         uint256 a,
         uint256 b,
         uint256 maxPercentDelta // An 18 decimal fixed point number, where 1e18 == 100%
-    ) internal virtual {
+    )
+        internal
+        virtual
+    {
         if (b == 0) return assertEq(a, b); // If the expected is 0, actual must be too.
 
-        uint256 percentDelta = ((a > b ? a - b : b - a) * 1e18) / b;
+        uint256 percentDelta = (a > b ? a - b : b - a) * 1e18 / b;
 
         if (percentDelta > maxPercentDelta) {
             emit log("Error: a ~= b not satisfied [uint]");
@@ -137,7 +141,10 @@ contract DSTestPlus is DSTest {
         }
     }
 
-    function assertUintArrayEq(uint256[] memory a, uint256[] memory b) internal virtual {
+    function assertUintArrayEq(uint256[] memory a, uint256[] memory b)
+        internal
+        virtual
+    {
         require(a.length == b.length, "LENGTH_MISMATCH");
 
         for (uint256 i = 0; i < a.length; i++) {
@@ -145,11 +152,10 @@ contract DSTestPlus is DSTest {
         }
     }
 
-    function bound(
-        uint256 x,
-        uint256 min,
-        uint256 max
-    ) internal returns (uint256 result) {
+    function bound(uint256 x, uint256 min, uint256 max)
+        internal
+        returns (uint256 result)
+    {
         require(max >= min, "MAX_LESS_THAN_MIN");
 
         uint256 size = max - min;
@@ -165,11 +171,11 @@ contract DSTestPlus is DSTest {
         emit log_named_uint("Bound Result", result);
     }
 
-    function min3(
-        uint256 a,
-        uint256 b,
-        uint256 c
-    ) internal pure returns (uint256) {
+    function min3(uint256 a, uint256 b, uint256 c)
+        internal
+        pure
+        returns (uint256)
+    {
         return a > b ? (b > c ? c : b) : (a > c ? c : a);
     }
 

@@ -21,7 +21,9 @@ contract ERC4626Test is DSTestPlus {
         assertEq(vault.decimals(), 18);
     }
 
-    function testMetadata(string calldata name, string calldata symbol) public {
+    function testMetadata(string calldata name, string calldata symbol)
+        public
+    {
         MockERC4626 vlt = new MockERC4626(underlying, name, symbol);
         assertEq(vlt.name(), name);
         assertEq(vlt.symbol(), symbol);

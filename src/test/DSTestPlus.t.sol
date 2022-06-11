@@ -22,11 +22,7 @@ contract DSTestPlusTest is DSTestPlus {
         assertRelApproxEq(0, 0, 0);
     }
 
-    function testBound(
-        uint256 num,
-        uint256 min,
-        uint256 max
-    ) public {
+    function testBound(uint256 num, uint256 min, uint256 max) public {
         if (min > max) (min, max) = (max, min);
 
         uint256 bounded = bound(num, min, max);
@@ -39,7 +35,9 @@ contract DSTestPlusTest is DSTestPlus {
         uint256 num,
         uint256 min,
         uint256 max
-    ) public {
+    )
+        public
+    {
         if (max == min) {
             unchecked {
                 min++; // Overflow is handled below.
@@ -51,7 +49,10 @@ contract DSTestPlusTest is DSTestPlus {
         bound(num, min, max);
     }
 
-    function testBrutalizeMemory() public brutalizeMemory("FEEDFACECAFEBEEFFEEDFACECAFEBEEF") {
+    function testBrutalizeMemory()
+        public
+        brutalizeMemory("FEEDFACECAFEBEEFFEEDFACECAFEBEEF")
+    {
         bytes32 scratchSpace1;
         bytes32 scratchSpace2;
         bytes32 freeMem1;

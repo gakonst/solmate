@@ -8,7 +8,11 @@ contract ReturnsTwoToken {
 
     event Transfer(address indexed from, address indexed to, uint256 amount);
 
-    event Approval(address indexed owner, address indexed spender, uint256 amount);
+    event Approval(
+        address indexed owner,
+        address indexed spender,
+        uint256 amount
+    );
 
     /*///////////////////////////////////////////////////////////////
                              METADATA STORAGE
@@ -51,11 +55,11 @@ contract ReturnsTwoToken {
         return 2;
     }
 
-    function transferFrom(
-        address,
-        address,
-        uint256
-    ) public virtual returns (uint256) {
+    function transferFrom(address, address, uint256)
+        public
+        virtual
+        returns (uint256)
+    {
         return 2;
     }
 }

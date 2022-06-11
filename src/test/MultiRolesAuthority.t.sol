@@ -12,7 +12,8 @@ contract MultiRolesAuthorityTest is DSTestPlus {
     MultiRolesAuthority multiRolesAuthority;
 
     function setUp() public {
-        multiRolesAuthority = new MultiRolesAuthority(address(this), Authority(address(0)));
+        multiRolesAuthority =
+            new MultiRolesAuthority(address(this), Authority(address(0)));
     }
 
     function testSetRoles() public {
@@ -103,7 +104,9 @@ contract MultiRolesAuthorityTest is DSTestPlus {
         assertTrue(multiRolesAuthority.canCall(address(0xBEEF), address(0xCAFE), 0xBEEFCAFE));
     }
 
-    function testCanCallWithCustomAuthorityOverridesPublicCapability() public {
+    function testCanCallWithCustomAuthorityOverridesPublicCapability()
+        public
+    {
         assertFalse(multiRolesAuthority.canCall(address(0xBEEF), address(0xCAFE), 0xBEEFCAFE));
 
         multiRolesAuthority.setPublicCapability(0xBEEFCAFE, true);
@@ -186,7 +189,12 @@ contract MultiRolesAuthorityTest is DSTestPlus {
         assertFalse(multiRolesAuthority.isCapabilityPublic(functionSig));
     }
 
-    function testSetTargetCustomAuthority(address user, Authority customAuthority) public {
+    function testSetTargetCustomAuthority(
+        address user,
+        Authority customAuthority
+    )
+        public
+    {
         assertEq(address(multiRolesAuthority.getTargetCustomAuthority(user)), address(0));
 
         multiRolesAuthority.setTargetCustomAuthority(user, customAuthority);
@@ -201,7 +209,9 @@ contract MultiRolesAuthorityTest is DSTestPlus {
         uint8 role,
         address target,
         bytes4 functionSig
-    ) public {
+    )
+        public
+    {
         assertFalse(multiRolesAuthority.canCall(user, target, functionSig));
 
         multiRolesAuthority.setUserRole(user, role, true);
@@ -224,7 +234,9 @@ contract MultiRolesAuthorityTest is DSTestPlus {
         address user,
         address target,
         bytes4 functionSig
-    ) public {
+    )
+        public
+    {
         assertFalse(multiRolesAuthority.canCall(user, target, functionSig));
 
         multiRolesAuthority.setPublicCapability(functionSig, true);
@@ -238,7 +250,9 @@ contract MultiRolesAuthorityTest is DSTestPlus {
         address user,
         address target,
         bytes4 functionSig
-    ) public {
+    )
+        public
+    {
         assertFalse(multiRolesAuthority.canCall(user, target, functionSig));
 
         multiRolesAuthority.setTargetCustomAuthority(target, new MockAuthority(false));
@@ -261,7 +275,9 @@ contract MultiRolesAuthorityTest is DSTestPlus {
         address user,
         address target,
         bytes4 functionSig
-    ) public {
+    )
+        public
+    {
         assertFalse(multiRolesAuthority.canCall(user, target, functionSig));
 
         multiRolesAuthority.setPublicCapability(functionSig, true);
@@ -288,7 +304,9 @@ contract MultiRolesAuthorityTest is DSTestPlus {
         uint8 role,
         address target,
         bytes4 functionSig
-    ) public {
+    )
+        public
+    {
         assertFalse(multiRolesAuthority.canCall(user, target, functionSig));
 
         multiRolesAuthority.setUserRole(user, role, true);

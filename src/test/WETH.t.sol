@@ -87,7 +87,9 @@ contract WETHTest is DSTestPlus {
         assertEq(weth.totalSupply(), amount);
     }
 
-    function testWithdraw(uint256 depositAmount, uint256 withdrawAmount) public {
+    function testWithdraw(uint256 depositAmount, uint256 withdrawAmount)
+        public
+    {
         depositAmount = bound(depositAmount, 0, address(this).balance);
         withdrawAmount = bound(withdrawAmount, 0, depositAmount);
 

@@ -30,15 +30,15 @@ library CREATE3 {
     // 0x60       |  0x6018               | PUSH1 18         | 24 8                   //
     // 0xf3       |  0xf3                 | RETURN           |                        //
     //--------------------------------------------------------------------------------//
-    bytes internal constant PROXY_BYTECODE = hex"67_36_3d_3d_37_36_3d_34_f0_3d_52_60_08_60_18_f3";
+    bytes internal constant PROXY_BYTECODE =
+        hex"67_36_3d_3d_37_36_3d_34_f0_3d_52_60_08_60_18_f3";
 
     bytes32 internal constant PROXY_BYTECODE_HASH = keccak256(PROXY_BYTECODE);
 
-    function deploy(
-        bytes32 salt,
-        bytes memory creationCode,
-        uint256 value
-    ) internal returns (address deployed) {
+    function deploy(bytes32 salt, bytes memory creationCode, uint256 value)
+        internal
+        returns (address deployed)
+    {
         bytes memory proxyChildBytecode = PROXY_BYTECODE;
 
         address proxy;
@@ -50,7 +50,7 @@ library CREATE3 {
         require(proxy != address(0), "DEPLOYMENT_FAILED");
 
         deployed = getDeployed(salt);
-        (bool success, ) = proxy.call{value: value}(creationCode);
+        (bool success,) = proxy.call{value: value}(creationCode);
         require(success && deployed.code.length != 0, "INITIALIZATION_FAILED");
     }
 

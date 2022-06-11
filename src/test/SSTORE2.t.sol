@@ -60,7 +60,10 @@ contract SSTORE2Test is DSTestPlus {
         SSTORE2.read(SSTORE2.write(hex"11223344"), 41000, 42000);
     }
 
-    function testWriteRead(bytes calldata testBytes, bytes calldata brutalizeWith)
+    function testWriteRead(
+        bytes calldata testBytes,
+        bytes calldata brutalizeWith
+    )
         public
         brutalizeMemory(brutalizeWith)
     {
@@ -71,7 +74,10 @@ contract SSTORE2Test is DSTestPlus {
         bytes calldata testBytes,
         uint256 startIndex,
         bytes calldata brutalizeWith
-    ) public brutalizeMemory(brutalizeWith) {
+    )
+        public
+        brutalizeMemory(brutalizeWith)
+    {
         if (testBytes.length == 0) return;
 
         startIndex = bound(startIndex, 0, testBytes.length);
@@ -84,7 +90,10 @@ contract SSTORE2Test is DSTestPlus {
         uint256 startIndex,
         uint256 endIndex,
         bytes calldata brutalizeWith
-    ) public brutalizeMemory(brutalizeWith) {
+    )
+        public
+        brutalizeMemory(brutalizeWith)
+    {
         if (testBytes.length == 0) return;
 
         endIndex = bound(endIndex, 0, testBytes.length);
@@ -98,7 +107,10 @@ contract SSTORE2Test is DSTestPlus {
         );
     }
 
-    function testFailReadInvalidPointer(address pointer, bytes calldata brutalizeWith)
+    function testFailReadInvalidPointer(
+        address pointer,
+        bytes calldata brutalizeWith
+    )
         public
         view
         brutalizeMemory(brutalizeWith)
@@ -112,7 +124,11 @@ contract SSTORE2Test is DSTestPlus {
         address pointer,
         uint256 startIndex,
         bytes calldata brutalizeWith
-    ) public view brutalizeMemory(brutalizeWith) {
+    )
+        public
+        view
+        brutalizeMemory(brutalizeWith)
+    {
         if (pointer.code.length > 0) revert();
 
         SSTORE2.read(pointer, startIndex);
@@ -123,7 +139,11 @@ contract SSTORE2Test is DSTestPlus {
         uint256 startIndex,
         uint256 endIndex,
         bytes calldata brutalizeWith
-    ) public view brutalizeMemory(brutalizeWith) {
+    )
+        public
+        view
+        brutalizeMemory(brutalizeWith)
+    {
         if (pointer.code.length > 0) revert();
 
         SSTORE2.read(pointer, startIndex, endIndex);
@@ -133,7 +153,10 @@ contract SSTORE2Test is DSTestPlus {
         bytes calldata testBytes,
         uint256 startIndex,
         bytes calldata brutalizeWith
-    ) public brutalizeMemory(brutalizeWith) {
+    )
+        public
+        brutalizeMemory(brutalizeWith)
+    {
         startIndex = bound(startIndex, testBytes.length + 1, type(uint256).max);
 
         SSTORE2.read(SSTORE2.write(testBytes), startIndex);
@@ -144,7 +167,10 @@ contract SSTORE2Test is DSTestPlus {
         uint256 startIndex,
         uint256 endIndex,
         bytes calldata brutalizeWith
-    ) public brutalizeMemory(brutalizeWith) {
+    )
+        public
+        brutalizeMemory(brutalizeWith)
+    {
         endIndex = bound(endIndex, testBytes.length + 1, type(uint256).max);
 
         SSTORE2.read(SSTORE2.write(testBytes), startIndex, endIndex);

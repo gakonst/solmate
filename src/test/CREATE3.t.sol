@@ -46,7 +46,9 @@ contract CREATE3Test is DSTestPlus {
         string calldata name,
         string calldata symbol,
         uint8 decimals
-    ) public {
+    )
+        public
+    {
         MockERC20 deployed = MockERC20(
             CREATE3.deploy(salt, abi.encodePacked(type(MockERC20).creationCode, abi.encode(name, symbol, decimals)), 0)
         );
@@ -58,7 +60,12 @@ contract CREATE3Test is DSTestPlus {
         assertEq(deployed.decimals(), decimals);
     }
 
-    function testFailDoubleDeploySameBytecode(bytes32 salt, bytes calldata bytecode) public {
+    function testFailDoubleDeploySameBytecode(
+        bytes32 salt,
+        bytes calldata bytecode
+    )
+        public
+    {
         CREATE3.deploy(salt, bytecode, 0);
         CREATE3.deploy(salt, bytecode, 0);
     }
@@ -67,7 +74,9 @@ contract CREATE3Test is DSTestPlus {
         bytes32 salt,
         bytes calldata bytecode1,
         bytes calldata bytecode2
-    ) public {
+    )
+        public
+    {
         CREATE3.deploy(salt, bytecode1, 0);
         CREATE3.deploy(salt, bytecode2, 0);
     }

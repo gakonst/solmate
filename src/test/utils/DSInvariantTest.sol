@@ -4,7 +4,12 @@ pragma solidity >=0.8.0;
 contract DSInvariantTest {
     address[] private targets;
 
-    function targetContracts() public view virtual returns (address[] memory) {
+    function targetContracts()
+        public
+        view
+        virtual
+        returns (address[] memory)
+    {
         require(targets.length > 0, "NO_TARGET_CONTRACTS");
 
         return targets;

@@ -8,7 +8,11 @@ contract RevertingToken {
 
     event Transfer(address indexed from, address indexed to, uint256 amount);
 
-    event Approval(address indexed owner, address indexed spender, uint256 amount);
+    event Approval(
+        address indexed owner,
+        address indexed spender,
+        uint256 amount
+    );
 
     /*///////////////////////////////////////////////////////////////
                              METADATA STORAGE
@@ -51,11 +55,7 @@ contract RevertingToken {
         revert();
     }
 
-    function transferFrom(
-        address,
-        address,
-        uint256
-    ) public virtual {
+    function transferFrom(address, address, uint256) public virtual {
         revert();
     }
 }

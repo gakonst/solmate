@@ -15,20 +15,12 @@ interface Hevm {
     function load(address, bytes32) external returns (bytes32);
 
     /// @notice Stores a value to an address' storage slot.
-    function store(
-        address,
-        bytes32,
-        bytes32
-    ) external;
+    function store(address, bytes32, bytes32) external;
 
     /// @notice Signs a digest with a private key, returns v r s.
     function sign(uint256, bytes32)
         external
-        returns (
-            uint8,
-            bytes32,
-            bytes32
-        );
+        returns (uint8, bytes32, bytes32);
 
     /// @notice Gets address for a given private key.
     function addr(uint256) external returns (address);
@@ -68,26 +60,19 @@ interface Hevm {
     function record() external;
 
     /// @notice Gets all accessed reads and write slots from a recording session, for a given address.
-    function accesses(address) external returns (bytes32[] memory reads, bytes32[] memory writes);
+    function accesses(address)
+        external
+        returns (bytes32[] memory reads, bytes32[] memory writes);
 
     /// @notice Prepare an expected log with (bool checkTopic1, bool checkTopic2, bool checkTopic3, bool checkData).
     /// @notice Call this function, then emit an event, then call a function. Internally after the call, we check
     /// if logs were emitted in the expected order with the expected topics and data as specified by the booleans.
-    function expectEmit(
-        bool,
-        bool,
-        bool,
-        bool
-    ) external;
+    function expectEmit(bool, bool, bool, bool) external;
 
     /// @notice Mocks the behavior of a contract call, setting the input and output for a function.
     /// @notice Calldata can either be strict or a partial match, e.g. if only passed
     /// a selector to the expected calldata, then the entire function will be mocked.
-    function mockCall(
-        address,
-        bytes calldata,
-        bytes calldata
-    ) external;
+    function mockCall(address, bytes calldata, bytes calldata) external;
 
     /// @notice Clears all mocked calls.
     function clearMockedCalls() external;

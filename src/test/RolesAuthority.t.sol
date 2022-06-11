@@ -12,7 +12,8 @@ contract RolesAuthorityTest is DSTestPlus {
     RolesAuthority rolesAuthority;
 
     function setUp() public {
-        rolesAuthority = new RolesAuthority(address(this), Authority(address(0)));
+        rolesAuthority =
+            new RolesAuthority(address(this), Authority(address(0)));
     }
 
     function testSetRoles() public {
@@ -88,7 +89,9 @@ contract RolesAuthorityTest is DSTestPlus {
         uint8 role,
         address target,
         bytes4 functionSig
-    ) public {
+    )
+        public
+    {
         assertFalse(rolesAuthority.doesRoleHaveCapability(role, target, functionSig));
 
         rolesAuthority.setRoleCapability(role, target, functionSig, true);
@@ -98,7 +101,9 @@ contract RolesAuthorityTest is DSTestPlus {
         assertFalse(rolesAuthority.doesRoleHaveCapability(role, target, functionSig));
     }
 
-    function testSetPublicCapabilities(address target, bytes4 functionSig) public {
+    function testSetPublicCapabilities(address target, bytes4 functionSig)
+        public
+    {
         assertFalse(rolesAuthority.isCapabilityPublic(target, functionSig));
 
         rolesAuthority.setPublicCapability(target, functionSig, true);
@@ -113,7 +118,9 @@ contract RolesAuthorityTest is DSTestPlus {
         uint8 role,
         address target,
         bytes4 functionSig
-    ) public {
+    )
+        public
+    {
         assertFalse(rolesAuthority.canCall(user, target, functionSig));
 
         rolesAuthority.setUserRole(user, role, true);
@@ -136,7 +143,9 @@ contract RolesAuthorityTest is DSTestPlus {
         address user,
         address target,
         bytes4 functionSig
-    ) public {
+    )
+        public
+    {
         assertFalse(rolesAuthority.canCall(user, target, functionSig));
 
         rolesAuthority.setPublicCapability(target, functionSig, true);

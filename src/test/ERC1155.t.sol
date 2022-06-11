@@ -21,7 +21,11 @@ contract ERC1155Recipient is ERC1155TokenReceiver {
         uint256 _id,
         uint256 _amount,
         bytes calldata _data
-    ) public override returns (bytes4) {
+    )
+        public
+        override
+        returns (bytes4)
+    {
         operator = _operator;
         from = _from;
         id = _id;
@@ -51,7 +55,11 @@ contract ERC1155Recipient is ERC1155TokenReceiver {
         uint256[] calldata _ids,
         uint256[] calldata _amounts,
         bytes calldata _data
-    ) external override returns (bytes4) {
+    )
+        external
+        override
+        returns (bytes4)
+    {
         batchOperator = _operator;
         batchFrom = _from;
         _batchIds = _ids;
@@ -69,7 +77,12 @@ contract RevertingERC1155Recipient is ERC1155TokenReceiver {
         uint256,
         uint256,
         bytes calldata
-    ) public pure override returns (bytes4) {
+    )
+        public
+        pure
+        override
+        returns (bytes4)
+    {
         revert(string(abi.encodePacked(ERC1155TokenReceiver.onERC1155Received.selector)));
     }
 
@@ -79,7 +92,12 @@ contract RevertingERC1155Recipient is ERC1155TokenReceiver {
         uint256[] calldata,
         uint256[] calldata,
         bytes calldata
-    ) external pure override returns (bytes4) {
+    )
+        external
+        pure
+        override
+        returns (bytes4)
+    {
         revert(string(abi.encodePacked(ERC1155TokenReceiver.onERC1155BatchReceived.selector)));
     }
 }
@@ -91,7 +109,12 @@ contract WrongReturnDataERC1155Recipient is ERC1155TokenReceiver {
         uint256,
         uint256,
         bytes calldata
-    ) public pure override returns (bytes4) {
+    )
+        public
+        pure
+        override
+        returns (bytes4)
+    {
         return 0xCAFEBEEF;
     }
 
@@ -101,7 +124,12 @@ contract WrongReturnDataERC1155Recipient is ERC1155TokenReceiver {
         uint256[] calldata,
         uint256[] calldata,
         bytes calldata
-    ) external pure override returns (bytes4) {
+    )
+        external
+        pure
+        override
+        returns (bytes4)
+    {
         return 0xCAFEBEEF;
     }
 }
@@ -112,7 +140,8 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
     MockERC1155 token;
 
     mapping(address => mapping(uint256 => uint256)) public userMintAmounts;
-    mapping(address => mapping(uint256 => uint256)) public userTransferOrBurnAmounts;
+    mapping(address => mapping(uint256 => uint256)) public
+        userTransferOrBurnAmounts;
 
     function setUp() public {
         token = new MockERC1155();
@@ -468,7 +497,9 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         token.safeTransferFrom(address(this), address(new RevertingERC1155Recipient()), 1337, 70, "");
     }
 
-    function testFailSafeTransferFromToWrongReturnDataERC1155Recipient() public {
+    function testFailSafeTransferFromToWrongReturnDataERC1155Recipient()
+        public
+    {
         token.mint(address(this), 1337, 100, "");
         token.safeTransferFrom(address(this), address(new WrongReturnDataERC1155Recipient()), 1337, 70, "");
     }
@@ -570,7 +601,9 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         token.safeBatchTransferFrom(from, address(new NonERC1155Recipient()), ids, transferAmounts, "");
     }
 
-    function testFailSafeBatchTransferFromToRevertingERC1155Recipient() public {
+    function testFailSafeBatchTransferFromToRevertingERC1155Recipient()
+        public
+    {
         address from = address(0xABCD);
 
         uint256[] memory ids = new uint256[](5);
@@ -602,7 +635,9 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         token.safeBatchTransferFrom(from, address(new RevertingERC1155Recipient()), ids, transferAmounts, "");
     }
 
-    function testFailSafeBatchTransferFromToWrongReturnDataERC1155Recipient() public {
+    function testFailSafeBatchTransferFromToWrongReturnDataERC1155Recipient()
+        public
+    {
         address from = address(0xABCD);
 
         uint256[] memory ids = new uint256[](5);
@@ -724,7 +759,8 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
     }
 
     function testFailBatchMintToWrongReturnDataERC1155Recipient() public {
-        WrongReturnDataERC1155Recipient to = new WrongReturnDataERC1155Recipient();
+        WrongReturnDataERC1155Recipient to =
+            new WrongReturnDataERC1155Recipient();
 
         uint256[] memory ids = new uint256[](5);
         ids[0] = 1337;
@@ -835,7 +871,9 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256 id,
         uint256 amount,
         bytes memory mintData
-    ) public {
+    )
+        public
+    {
         if (to == address(0)) to = address(0xBEEF);
 
         if (uint256(uint160(to)) <= 18 || to.code.length > 0) return;
@@ -849,7 +887,9 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256 id,
         uint256 amount,
         bytes memory mintData
-    ) public {
+    )
+        public
+    {
         ERC1155Recipient to = new ERC1155Recipient();
 
         token.mint(address(to), id, amount, mintData);
@@ -867,7 +907,9 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory mintData
-    ) public {
+    )
+        public
+    {
         if (to == address(0)) to = address(0xBEEF);
 
         if (uint256(uint160(to)) <= 18 || to.code.length > 0) return;
@@ -880,7 +922,8 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         for (uint256 i = 0; i < minLength; i++) {
             uint256 id = ids[i];
 
-            uint256 remainingMintAmountForId = type(uint256).max - userMintAmounts[to][id];
+            uint256 remainingMintAmountForId =
+                type(uint256).max - userMintAmounts[to][id];
 
             uint256 mintAmount = bound(amounts[i], 0, remainingMintAmountForId);
 
@@ -903,7 +946,9 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory mintData
-    ) public {
+    )
+        public
+    {
         ERC1155Recipient to = new ERC1155Recipient();
 
         uint256 minLength = min2(ids.length, amounts.length);
@@ -914,7 +959,8 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         for (uint256 i = 0; i < minLength; i++) {
             uint256 id = ids[i];
 
-            uint256 remainingMintAmountForId = type(uint256).max - userMintAmounts[address(to)][id];
+            uint256 remainingMintAmountForId =
+                type(uint256).max - userMintAmounts[address(to)][id];
 
             uint256 mintAmount = bound(amounts[i], 0, remainingMintAmountForId);
 
@@ -945,7 +991,9 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256 mintAmount,
         bytes memory mintData,
         uint256 burnAmount
-    ) public {
+    )
+        public
+    {
         if (to == address(0)) to = address(0xBEEF);
 
         if (uint256(uint160(to)) <= 18 || to.code.length > 0) return;
@@ -965,12 +1013,15 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256[] memory mintAmounts,
         uint256[] memory burnAmounts,
         bytes memory mintData
-    ) public {
+    )
+        public
+    {
         if (to == address(0)) to = address(0xBEEF);
 
         if (uint256(uint160(to)) <= 18 || to.code.length > 0) return;
 
-        uint256 minLength = min3(ids.length, mintAmounts.length, burnAmounts.length);
+        uint256 minLength =
+            min3(ids.length, mintAmounts.length, burnAmounts.length);
 
         uint256[] memory normalizedIds = new uint256[](minLength);
         uint256[] memory normalizedMintAmounts = new uint256[](minLength);
@@ -979,14 +1030,18 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         for (uint256 i = 0; i < minLength; i++) {
             uint256 id = ids[i];
 
-            uint256 remainingMintAmountForId = type(uint256).max - userMintAmounts[address(to)][id];
+            uint256 remainingMintAmountForId =
+                type(uint256).max - userMintAmounts[address(to)][id];
 
             normalizedIds[i] = id;
-            normalizedMintAmounts[i] = bound(mintAmounts[i], 0, remainingMintAmountForId);
-            normalizedBurnAmounts[i] = bound(burnAmounts[i], 0, normalizedMintAmounts[i]);
+            normalizedMintAmounts[i] =
+                bound(mintAmounts[i], 0, remainingMintAmountForId);
+            normalizedBurnAmounts[i] =
+                bound(burnAmounts[i], 0, normalizedMintAmounts[i]);
 
             userMintAmounts[address(to)][id] += normalizedMintAmounts[i];
-            userTransferOrBurnAmounts[address(to)][id] += normalizedBurnAmounts[i];
+            userTransferOrBurnAmounts[address(to)][id] +=
+                normalizedBurnAmounts[i];
         }
 
         token.batchMint(to, normalizedIds, normalizedMintAmounts, mintData);
@@ -1013,7 +1068,9 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256 transferAmount,
         address to,
         bytes memory transferData
-    ) public {
+    )
+        public
+    {
         if (to == address(0)) to = address(0xBEEF);
 
         if (uint256(uint160(to)) <= 18 || to.code.length > 0) return;
@@ -1039,7 +1096,9 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         bytes memory mintData,
         uint256 transferAmount,
         bytes memory transferData
-    ) public {
+    )
+        public
+    {
         ERC1155Recipient to = new ERC1155Recipient();
 
         address from = address(0xABCD);
@@ -1069,7 +1128,9 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256 transferAmount,
         address to,
         bytes memory transferData
-    ) public {
+    )
+        public
+    {
         if (to == address(0)) to = address(0xBEEF);
 
         if (uint256(uint160(to)) <= 18 || to.code.length > 0) return;
@@ -1091,14 +1152,17 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256[] memory transferAmounts,
         bytes memory mintData,
         bytes memory transferData
-    ) public {
+    )
+        public
+    {
         if (to == address(0)) to = address(0xBEEF);
 
         if (uint256(uint160(to)) <= 18 || to.code.length > 0) return;
 
         address from = address(0xABCD);
 
-        uint256 minLength = min3(ids.length, mintAmounts.length, transferAmounts.length);
+        uint256 minLength =
+            min3(ids.length, mintAmounts.length, transferAmounts.length);
 
         uint256[] memory normalizedIds = new uint256[](minLength);
         uint256[] memory normalizedMintAmounts = new uint256[](minLength);
@@ -1107,9 +1171,11 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         for (uint256 i = 0; i < minLength; i++) {
             uint256 id = ids[i];
 
-            uint256 remainingMintAmountForId = type(uint256).max - userMintAmounts[from][id];
+            uint256 remainingMintAmountForId =
+                type(uint256).max - userMintAmounts[from][id];
 
-            uint256 mintAmount = bound(mintAmounts[i], 0, remainingMintAmountForId);
+            uint256 mintAmount =
+                bound(mintAmounts[i], 0, remainingMintAmountForId);
             uint256 transferAmount = bound(transferAmounts[i], 0, mintAmount);
 
             normalizedIds[i] = id;
@@ -1141,12 +1207,15 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256[] memory transferAmounts,
         bytes memory mintData,
         bytes memory transferData
-    ) public {
+    )
+        public
+    {
         address from = address(0xABCD);
 
         ERC1155Recipient to = new ERC1155Recipient();
 
-        uint256 minLength = min3(ids.length, mintAmounts.length, transferAmounts.length);
+        uint256 minLength =
+            min3(ids.length, mintAmounts.length, transferAmounts.length);
 
         uint256[] memory normalizedIds = new uint256[](minLength);
         uint256[] memory normalizedMintAmounts = new uint256[](minLength);
@@ -1155,9 +1224,11 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         for (uint256 i = 0; i < minLength; i++) {
             uint256 id = ids[i];
 
-            uint256 remainingMintAmountForId = type(uint256).max - userMintAmounts[from][id];
+            uint256 remainingMintAmountForId =
+                type(uint256).max - userMintAmounts[from][id];
 
-            uint256 mintAmount = bound(mintAmounts[i], 0, remainingMintAmountForId);
+            uint256 mintAmount =
+                bound(mintAmounts[i], 0, remainingMintAmountForId);
             uint256 transferAmount = bound(transferAmounts[i], 0, mintAmount);
 
             normalizedIds[i] = id;
@@ -1195,7 +1266,9 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory mintData
-    ) public {
+    )
+        public
+    {
         uint256 minLength = min3(tos.length, ids.length, amounts.length);
 
         address[] memory normalizedTos = new address[](minLength);
@@ -1205,7 +1278,8 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
             uint256 id = ids[i];
             address to = tos[i] == address(0) ? address(0xBEEF) : tos[i];
 
-            uint256 remainingMintAmountForId = type(uint256).max - userMintAmounts[to][id];
+            uint256 remainingMintAmountForId =
+                type(uint256).max - userMintAmounts[to][id];
 
             normalizedTos[i] = to;
             normalizedIds[i] = id;
@@ -1217,18 +1291,17 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
             userMintAmounts[to][id] += mintAmount;
         }
 
-        uint256[] memory balances = token.balanceOfBatch(normalizedTos, normalizedIds);
+        uint256[] memory balances =
+            token.balanceOfBatch(normalizedTos, normalizedIds);
 
         for (uint256 i = 0; i < normalizedTos.length; i++) {
             assertEq(balances[i], token.balanceOf(normalizedTos[i], normalizedIds[i]));
         }
     }
 
-    function testFailMintToZero(
-        uint256 id,
-        uint256 amount,
-        bytes memory data
-    ) public {
+    function testFailMintToZero(uint256 id, uint256 amount, bytes memory data)
+        public
+    {
         token.mint(address(0), id, amount, data);
     }
 
@@ -1236,7 +1309,9 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256 id,
         uint256 mintAmount,
         bytes memory mintData
-    ) public {
+    )
+        public
+    {
         token.mint(address(new NonERC1155Recipient()), id, mintAmount, mintData);
     }
 
@@ -1244,7 +1319,9 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256 id,
         uint256 mintAmount,
         bytes memory mintData
-    ) public {
+    )
+        public
+    {
         token.mint(address(new RevertingERC1155Recipient()), id, mintAmount, mintData);
     }
 
@@ -1252,7 +1329,9 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256 id,
         uint256 mintAmount,
         bytes memory mintData
-    ) public {
+    )
+        public
+    {
         token.mint(address(new RevertingERC1155Recipient()), id, mintAmount, mintData);
     }
 
@@ -1262,7 +1341,9 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256 mintAmount,
         uint256 burnAmount,
         bytes memory mintData
-    ) public {
+    )
+        public
+    {
         burnAmount = bound(burnAmount, mintAmount + 1, type(uint256).max);
 
         token.mint(to, id, mintAmount, mintData);
@@ -1276,10 +1357,13 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256 transferAmount,
         bytes memory mintData,
         bytes memory transferData
-    ) public {
+    )
+        public
+    {
         address from = address(0xABCD);
 
-        transferAmount = bound(transferAmount, mintAmount + 1, type(uint256).max);
+        transferAmount =
+            bound(transferAmount, mintAmount + 1, type(uint256).max);
 
         token.mint(from, id, mintAmount, mintData);
 
@@ -1296,8 +1380,11 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256 transferAmount,
         bytes memory mintData,
         bytes memory transferData
-    ) public {
-        transferAmount = bound(transferAmount, mintAmount + 1, type(uint256).max);
+    )
+        public
+    {
+        transferAmount =
+            bound(transferAmount, mintAmount + 1, type(uint256).max);
 
         token.mint(address(this), id, mintAmount, mintData);
         token.safeTransferFrom(address(this), to, id, transferAmount, transferData);
@@ -1309,7 +1396,9 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256 transferAmount,
         bytes memory mintData,
         bytes memory transferData
-    ) public {
+    )
+        public
+    {
         transferAmount = bound(transferAmount, 0, mintAmount);
 
         token.mint(address(this), id, mintAmount, mintData);
@@ -1322,7 +1411,9 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256 transferAmount,
         bytes memory mintData,
         bytes memory transferData
-    ) public {
+    )
+        public
+    {
         transferAmount = bound(transferAmount, 0, mintAmount);
 
         token.mint(address(this), id, mintAmount, mintData);
@@ -1335,7 +1426,9 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256 transferAmount,
         bytes memory mintData,
         bytes memory transferData
-    ) public {
+    )
+        public
+    {
         transferAmount = bound(transferAmount, 0, mintAmount);
 
         token.mint(address(this), id, mintAmount, mintData);
@@ -1354,7 +1447,9 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256 transferAmount,
         bytes memory mintData,
         bytes memory transferData
-    ) public {
+    )
+        public
+    {
         transferAmount = bound(transferAmount, 0, mintAmount);
 
         token.mint(address(this), id, mintAmount, mintData);
@@ -1374,10 +1469,13 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256[] memory transferAmounts,
         bytes memory mintData,
         bytes memory transferData
-    ) public {
+    )
+        public
+    {
         address from = address(0xABCD);
 
-        uint256 minLength = min3(ids.length, mintAmounts.length, transferAmounts.length);
+        uint256 minLength =
+            min3(ids.length, mintAmounts.length, transferAmounts.length);
 
         if (minLength == 0) revert();
 
@@ -1388,10 +1486,13 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         for (uint256 i = 0; i < minLength; i++) {
             uint256 id = ids[i];
 
-            uint256 remainingMintAmountForId = type(uint256).max - userMintAmounts[from][id];
+            uint256 remainingMintAmountForId =
+                type(uint256).max - userMintAmounts[from][id];
 
-            uint256 mintAmount = bound(mintAmounts[i], 0, remainingMintAmountForId);
-            uint256 transferAmount = bound(transferAmounts[i], mintAmount + 1, type(uint256).max);
+            uint256 mintAmount =
+                bound(mintAmounts[i], 0, remainingMintAmountForId);
+            uint256 transferAmount =
+                bound(transferAmounts[i], mintAmount + 1, type(uint256).max);
 
             normalizedIds[i] = id;
             normalizedMintAmounts[i] = mintAmount;
@@ -1414,10 +1515,13 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256[] memory transferAmounts,
         bytes memory mintData,
         bytes memory transferData
-    ) public {
+    )
+        public
+    {
         address from = address(0xABCD);
 
-        uint256 minLength = min3(ids.length, mintAmounts.length, transferAmounts.length);
+        uint256 minLength =
+            min3(ids.length, mintAmounts.length, transferAmounts.length);
 
         uint256[] memory normalizedIds = new uint256[](minLength);
         uint256[] memory normalizedMintAmounts = new uint256[](minLength);
@@ -1426,9 +1530,11 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         for (uint256 i = 0; i < minLength; i++) {
             uint256 id = ids[i];
 
-            uint256 remainingMintAmountForId = type(uint256).max - userMintAmounts[from][id];
+            uint256 remainingMintAmountForId =
+                type(uint256).max - userMintAmounts[from][id];
 
-            uint256 mintAmount = bound(mintAmounts[i], 0, remainingMintAmountForId);
+            uint256 mintAmount =
+                bound(mintAmounts[i], 0, remainingMintAmountForId);
             uint256 transferAmount = bound(transferAmounts[i], 0, mintAmount);
 
             normalizedIds[i] = id;
@@ -1452,10 +1558,13 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256[] memory transferAmounts,
         bytes memory mintData,
         bytes memory transferData
-    ) public {
+    )
+        public
+    {
         address from = address(0xABCD);
 
-        uint256 minLength = min3(ids.length, mintAmounts.length, transferAmounts.length);
+        uint256 minLength =
+            min3(ids.length, mintAmounts.length, transferAmounts.length);
 
         uint256[] memory normalizedIds = new uint256[](minLength);
         uint256[] memory normalizedMintAmounts = new uint256[](minLength);
@@ -1464,9 +1573,11 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         for (uint256 i = 0; i < minLength; i++) {
             uint256 id = ids[i];
 
-            uint256 remainingMintAmountForId = type(uint256).max - userMintAmounts[from][id];
+            uint256 remainingMintAmountForId =
+                type(uint256).max - userMintAmounts[from][id];
 
-            uint256 mintAmount = bound(mintAmounts[i], 0, remainingMintAmountForId);
+            uint256 mintAmount =
+                bound(mintAmounts[i], 0, remainingMintAmountForId);
             uint256 transferAmount = bound(transferAmounts[i], 0, mintAmount);
 
             normalizedIds[i] = id;
@@ -1496,10 +1607,13 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256[] memory transferAmounts,
         bytes memory mintData,
         bytes memory transferData
-    ) public {
+    )
+        public
+    {
         address from = address(0xABCD);
 
-        uint256 minLength = min3(ids.length, mintAmounts.length, transferAmounts.length);
+        uint256 minLength =
+            min3(ids.length, mintAmounts.length, transferAmounts.length);
 
         uint256[] memory normalizedIds = new uint256[](minLength);
         uint256[] memory normalizedMintAmounts = new uint256[](minLength);
@@ -1508,9 +1622,11 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         for (uint256 i = 0; i < minLength; i++) {
             uint256 id = ids[i];
 
-            uint256 remainingMintAmountForId = type(uint256).max - userMintAmounts[from][id];
+            uint256 remainingMintAmountForId =
+                type(uint256).max - userMintAmounts[from][id];
 
-            uint256 mintAmount = bound(mintAmounts[i], 0, remainingMintAmountForId);
+            uint256 mintAmount =
+                bound(mintAmounts[i], 0, remainingMintAmountForId);
             uint256 transferAmount = bound(transferAmounts[i], 0, mintAmount);
 
             normalizedIds[i] = id;
@@ -1540,10 +1656,13 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256[] memory transferAmounts,
         bytes memory mintData,
         bytes memory transferData
-    ) public {
+    )
+        public
+    {
         address from = address(0xABCD);
 
-        uint256 minLength = min3(ids.length, mintAmounts.length, transferAmounts.length);
+        uint256 minLength =
+            min3(ids.length, mintAmounts.length, transferAmounts.length);
 
         uint256[] memory normalizedIds = new uint256[](minLength);
         uint256[] memory normalizedMintAmounts = new uint256[](minLength);
@@ -1552,9 +1671,11 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         for (uint256 i = 0; i < minLength; i++) {
             uint256 id = ids[i];
 
-            uint256 remainingMintAmountForId = type(uint256).max - userMintAmounts[from][id];
+            uint256 remainingMintAmountForId =
+                type(uint256).max - userMintAmounts[from][id];
 
-            uint256 mintAmount = bound(mintAmounts[i], 0, remainingMintAmountForId);
+            uint256 mintAmount =
+                bound(mintAmounts[i], 0, remainingMintAmountForId);
             uint256 transferAmount = bound(transferAmounts[i], 0, mintAmount);
 
             normalizedIds[i] = id;
@@ -1585,7 +1706,9 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256[] memory transferAmounts,
         bytes memory mintData,
         bytes memory transferData
-    ) public {
+    )
+        public
+    {
         address from = address(0xABCD);
 
         if (ids.length == transferAmounts.length) revert();
@@ -1602,7 +1725,9 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory mintData
-    ) public {
+    )
+        public
+    {
         uint256 minLength = min2(ids.length, amounts.length);
 
         uint256[] memory normalizedIds = new uint256[](minLength);
@@ -1611,7 +1736,8 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         for (uint256 i = 0; i < minLength; i++) {
             uint256 id = ids[i];
 
-            uint256 remainingMintAmountForId = type(uint256).max - userMintAmounts[address(0)][id];
+            uint256 remainingMintAmountForId =
+                type(uint256).max - userMintAmounts[address(0)][id];
 
             uint256 mintAmount = bound(amounts[i], 0, remainingMintAmountForId);
 
@@ -1628,7 +1754,9 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory mintData
-    ) public {
+    )
+        public
+    {
         NonERC1155Recipient to = new NonERC1155Recipient();
 
         uint256 minLength = min2(ids.length, amounts.length);
@@ -1639,7 +1767,8 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         for (uint256 i = 0; i < minLength; i++) {
             uint256 id = ids[i];
 
-            uint256 remainingMintAmountForId = type(uint256).max - userMintAmounts[address(to)][id];
+            uint256 remainingMintAmountForId =
+                type(uint256).max - userMintAmounts[address(to)][id];
 
             uint256 mintAmount = bound(amounts[i], 0, remainingMintAmountForId);
 
@@ -1656,7 +1785,9 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory mintData
-    ) public {
+    )
+        public
+    {
         RevertingERC1155Recipient to = new RevertingERC1155Recipient();
 
         uint256 minLength = min2(ids.length, amounts.length);
@@ -1667,7 +1798,8 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         for (uint256 i = 0; i < minLength; i++) {
             uint256 id = ids[i];
 
-            uint256 remainingMintAmountForId = type(uint256).max - userMintAmounts[address(to)][id];
+            uint256 remainingMintAmountForId =
+                type(uint256).max - userMintAmounts[address(to)][id];
 
             uint256 mintAmount = bound(amounts[i], 0, remainingMintAmountForId);
 
@@ -1684,8 +1816,11 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory mintData
-    ) public {
-        WrongReturnDataERC1155Recipient to = new WrongReturnDataERC1155Recipient();
+    )
+        public
+    {
+        WrongReturnDataERC1155Recipient to =
+            new WrongReturnDataERC1155Recipient();
 
         uint256 minLength = min2(ids.length, amounts.length);
 
@@ -1695,7 +1830,8 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         for (uint256 i = 0; i < minLength; i++) {
             uint256 id = ids[i];
 
-            uint256 remainingMintAmountForId = type(uint256).max - userMintAmounts[address(to)][id];
+            uint256 remainingMintAmountForId =
+                type(uint256).max - userMintAmounts[address(to)][id];
 
             uint256 mintAmount = bound(amounts[i], 0, remainingMintAmountForId);
 
@@ -1713,7 +1849,9 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory mintData
-    ) public {
+    )
+        public
+    {
         if (ids.length == amounts.length) revert();
 
         token.batchMint(address(to), ids, amounts, mintData);
@@ -1725,8 +1863,11 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256[] memory mintAmounts,
         uint256[] memory burnAmounts,
         bytes memory mintData
-    ) public {
-        uint256 minLength = min3(ids.length, mintAmounts.length, burnAmounts.length);
+    )
+        public
+    {
+        uint256 minLength =
+            min3(ids.length, mintAmounts.length, burnAmounts.length);
 
         if (minLength == 0) revert();
 
@@ -1737,11 +1878,14 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         for (uint256 i = 0; i < minLength; i++) {
             uint256 id = ids[i];
 
-            uint256 remainingMintAmountForId = type(uint256).max - userMintAmounts[to][id];
+            uint256 remainingMintAmountForId =
+                type(uint256).max - userMintAmounts[to][id];
 
             normalizedIds[i] = id;
-            normalizedMintAmounts[i] = bound(mintAmounts[i], 0, remainingMintAmountForId);
-            normalizedBurnAmounts[i] = bound(burnAmounts[i], normalizedMintAmounts[i] + 1, type(uint256).max);
+            normalizedMintAmounts[i] =
+                bound(mintAmounts[i], 0, remainingMintAmountForId);
+            normalizedBurnAmounts[i] =
+            bound(burnAmounts[i], normalizedMintAmounts[i] + 1, type(uint256).max);
 
             userMintAmounts[to][id] += normalizedMintAmounts[i];
         }
@@ -1757,7 +1901,9 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         uint256[] memory mintAmounts,
         uint256[] memory burnAmounts,
         bytes memory mintData
-    ) public {
+    )
+        public
+    {
         if (ids.length == burnAmounts.length) revert();
 
         token.batchMint(to, ids, mintAmounts, mintData);
@@ -1765,7 +1911,13 @@ contract ERC1155Test is DSTestPlus, ERC1155TokenReceiver {
         token.batchBurn(to, ids, burnAmounts);
     }
 
-    function testFailBalanceOfBatchWithArrayMismatch(address[] memory tos, uint256[] memory ids) public view {
+    function testFailBalanceOfBatchWithArrayMismatch(
+        address[] memory tos,
+        uint256[] memory ids
+    )
+        public
+        view
+    {
         if (tos.length == ids.length) revert();
 
         token.balanceOfBatch(tos, ids);

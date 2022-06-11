@@ -11,7 +11,11 @@ library FixedPointMathLib {
 
     uint256 internal constant WAD = 1e18; // The scalar of ETH and most ERC20s.
 
-    function mulWadDown(uint256 x, uint256 y) internal pure returns (uint256) {
+    function mulWadDown(uint256 x, uint256 y)
+        internal
+        pure
+        returns (uint256)
+    {
         return mulDivDown(x, y, WAD); // Equivalent to (x * y) / WAD rounded down.
     }
 
@@ -19,7 +23,11 @@ library FixedPointMathLib {
         return mulDivUp(x, y, WAD); // Equivalent to (x * y) / WAD rounded up.
     }
 
-    function divWadDown(uint256 x, uint256 y) internal pure returns (uint256) {
+    function divWadDown(uint256 x, uint256 y)
+        internal
+        pure
+        returns (uint256)
+    {
         return mulDivDown(x, WAD, y); // Equivalent to (x * WAD) / y rounded down.
     }
 
@@ -31,11 +39,11 @@ library FixedPointMathLib {
                     LOW LEVEL FIXED POINT OPERATIONS
     //////////////////////////////////////////////////////////////*/
 
-    function mulDivDown(
-        uint256 x,
-        uint256 y,
-        uint256 denominator
-    ) internal pure returns (uint256 z) {
+    function mulDivDown(uint256 x, uint256 y, uint256 denominator)
+        internal
+        pure
+        returns (uint256 z)
+    {
         assembly {
             // Store x * y in z for now.
             z := mul(x, y)
@@ -50,11 +58,11 @@ library FixedPointMathLib {
         }
     }
 
-    function mulDivUp(
-        uint256 x,
-        uint256 y,
-        uint256 denominator
-    ) internal pure returns (uint256 z) {
+    function mulDivUp(uint256 x, uint256 y, uint256 denominator)
+        internal
+        pure
+        returns (uint256 z)
+    {
         assembly {
             // Store x * y in z for now.
             z := mul(x, y)
@@ -71,11 +79,11 @@ library FixedPointMathLib {
         }
     }
 
-    function rpow(
-        uint256 x,
-        uint256 n,
-        uint256 scalar
-    ) internal pure returns (uint256 z) {
+    function rpow(uint256 x, uint256 n, uint256 scalar)
+        internal
+        pure
+        returns (uint256 z)
+    {
         assembly {
             switch x
             case 0 {

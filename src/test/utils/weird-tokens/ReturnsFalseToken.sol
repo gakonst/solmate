@@ -8,7 +8,11 @@ contract ReturnsFalseToken {
 
     event Transfer(address indexed from, address indexed to, uint256 amount);
 
-    event Approval(address indexed owner, address indexed spender, uint256 amount);
+    event Approval(
+        address indexed owner,
+        address indexed spender,
+        uint256 amount
+    );
 
     /*///////////////////////////////////////////////////////////////
                              METADATA STORAGE
@@ -51,11 +55,11 @@ contract ReturnsFalseToken {
         return false;
     }
 
-    function transferFrom(
-        address,
-        address,
-        uint256
-    ) public virtual returns (bool) {
+    function transferFrom(address, address, uint256)
+        public
+        virtual
+        returns (bool)
+    {
         return false;
     }
 }
